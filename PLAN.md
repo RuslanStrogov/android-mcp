@@ -142,7 +142,7 @@ src/android_mcp/
 ## 6. Этапы (план → согласование → этапами, сначала одно устройство)
 
 - [x] **Этап 0. Согласование + каркас** — репо, план, структура, CI *(закрыт)*
-- [ ] **Этап 1. MVP** — device/screenshot(image)/ui/tap/swipe/type/key/launch + **wireless ADB** — проверить на одном телефоне по Wi-Fi *(в работе)*
+- [ ] **Этап 1. MVP** — device/screenshot(image)/ui/tap/swipe/type/key/launch + **wireless ADB** — проверить на одном телефоне по Wi-Fi *(в работе; на MIUI input/ui_dump заблокированы — см. §10)*
 - [ ] **Этап 2. Жесты и макросы** — hold/drag/multi-touch, combo, macro, wait_for, device_state
 - [ ] **Этап 3. Приложения и магазины** — app_*, RuStore/F-Droid, activity_start
 - [ ] **Этап 4. Сеть и безопасность** — HTTP-транспорт для удалённого агента, туннель (Tailscale/WG), approval-gate, ревью
@@ -192,4 +192,13 @@ src/android_mcp/
 | Wi-Fi ADB | `192.168.10.210:5555` (wireless, `adb tcpip 5555`; на Android <11 pairing недоступен) |
 | Настройки для автономной работы | `svc power stayon true` (не гаснет на зарядке), `locksettings set-disabled true` (не блокируется) |
 | Ограничение | MIUI блокирует `settings put` (нет WRITE_SECURE_SETTINGS) — часть тюнинга недоступна без root |
+| **❗ Блокировка ввода** | MIUI без спец-тумблера запрещает `input tap/swipe/text/keyevent` (**INJECT_EVENTS denied**). Лечится: *Настройки → Дополнительные → Для разработчиков → «Отладка по USB (настройки безопасности)»* (нужен Mi-аккаунт) либо root |
+| ❗ `uiautomator dump` | На этом ROM падает («could not get idle state» / таймаут) |
+| Что реально работает | screenshot ✅, запуск/стоп приложений ✅; input ❌, ui_dump ❌ (до тумблера/рута) |
 | Важно | После ребута слетает `tcpip`/stayon → нужен USB + повторная авторизация |
+
+### 10.1 Диагностика возможностей (`device_capabilities`)
+
+Чтобы не гадать, сервер умеет **пробовать возможности** и отчитываться (`capabilities.py`):
+`screenshot`, `input_inject`, `ui_dump`, `app_control` → ✅/❌ с причиной.
+Первый прогон на Redmi Note 7: screenshot ✅, app_control ✅, input ❌ (INJECT_EVENTS), ui_dump ❌.
