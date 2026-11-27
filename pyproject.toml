@@ -20,7 +20,7 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
-  "mcp>=1.2.0",
+  "mcp>=2.0.0",
 ]
 
 [project.optional-dependencies]

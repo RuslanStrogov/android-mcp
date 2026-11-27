@@ -5,7 +5,7 @@ Stage 1 (MVP): device listing, screenshot (image), UI dump, input, app control.
 
 from __future__ import annotations
 
-from mcp.server.fastmcp import FastMCP, Image
+from mcp.server.mcpserver import Image, MCPServer
 
 from . import apps, capabilities, capture
 from . import input as input_ops
@@ -15,10 +15,10 @@ from .device import parse_devices
 from .ui import find_by_text, format_elements, parse_ui
 
 
-def build_server(config: Config | None = None) -> FastMCP:
+def build_server(config: Config | None = None) -> MCPServer:
     """Create and configure the MCP server instance."""
     cfg = config or Config.from_env()
-    app = FastMCP("android-mcp")
+    app = MCPServer("android-mcp")
 
     async def _ui_text(serial: str | None) -> str:
         xml = await capture.dump_ui_xml(cfg, serial=serial)
