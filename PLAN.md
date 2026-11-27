@@ -141,8 +141,8 @@ src/android_mcp/
 
 ## 6. Этапы (план → согласование → этапами, сначала одно устройство)
 
-- [ ] **Этап 0. Согласование + каркас** — репо, план, структура, CI *(текущий)*
-- [ ] **Этап 1. MVP** — device/screenshot(image)/ui/tap/swipe/type/key/launch + **wireless ADB** — проверить на одном телефоне по Wi-Fi
+- [x] **Этап 0. Согласование + каркас** — репо, план, структура, CI *(закрыт)*
+- [ ] **Этап 1. MVP** — device/screenshot(image)/ui/tap/swipe/type/key/launch + **wireless ADB** — проверить на одном телефоне по Wi-Fi *(в работе)*
 - [ ] **Этап 2. Жесты и макросы** — hold/drag/multi-touch, combo, macro, wait_for, device_state
 - [ ] **Этап 3. Приложения и магазины** — app_*, RuStore/F-Droid, activity_start
 - [ ] **Этап 4. Сеть и безопасность** — HTTP-транспорт для удалённого агента, туннель (Tailscale/WG), approval-gate, ревью
@@ -179,6 +179,17 @@ src/android_mcp/
 
 ## 9. Открытые вопросы
 
-- Модель и версия Android свободного телефона для тестов.
+- ~~Модель и версия Android свободного телефона~~ → **Redmi Note 7 (`lavender`), Android 10 / MIUI 12**
 - Телефон в Tailscale/WireGuard для доступа извне — да/нет, какой туннель.
 - Нужна ли интеграция с флотом Hermes (авто-подключение профилей к серверу).
+
+## 10. Тестовое устройство (эталон)
+
+| Параметр | Значение |
+|---|---|
+| Модель | Redmi Note 7 (`lavender`), MIUI 12 (V125), Android 10 (SDK 29) |
+| Serial (USB) | `9735ca45` |
+| Wi-Fi ADB | `192.168.10.210:5555` (wireless, `adb tcpip 5555`; на Android <11 pairing недоступен) |
+| Настройки для автономной работы | `svc power stayon true` (не гаснет на зарядке), `locksettings set-disabled true` (не блокируется) |
+| Ограничение | MIUI блокирует `settings put` (нет WRITE_SECURE_SETTINGS) — часть тюнинга недоступна без root |
+| Важно | После ребута слетает `tcpip`/stayon → нужен USB + повторная авторизация |
