@@ -79,6 +79,16 @@ cd android-mcp
 }
 ```
 
+## Транспорты
+
+| Транспорт | Когда | Как |
+|---|---|---|
+| `stdio` (по умолчанию) | локальный клиент (Hermes, Claude, Cursor) | `python -m android_mcp` |
+| `streamable-http` | **удалённый агент** по сети / VPN / Tailscale | `python -m android_mcp --transport streamable-http --host 0.0.0.0 --port 8000` → `http://<host>:8000/mcp` |
+| `sse` | legacy удалённый | `--transport sse` |
+
+Проверка HTTP: `python scripts/smoke_http.py` (поднимет сервер и подключится клиентом).
+
 ## Архитектура
 
 См. [`PLAN.md`](PLAN.md) и [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).

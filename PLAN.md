@@ -145,7 +145,7 @@ src/android_mcp/
 - [ ] **Этап 1. MVP** — device/screenshot(image)/ui/tap/swipe/type/key/launch + **wireless ADB** — проверить на одном телефоне по Wi-Fi *(в работе; на MIUI input/ui_dump заблокированы — см. §10)*
 - [ ] **Этап 2. Жесты и макросы** — hold/drag/multi-touch, combo, macro, wait_for, device_state
 - [ ] **Этап 3. Приложения и магазины** — app_*, RuStore/F-Droid, activity_start
-- [ ] **Этап 4. Сеть и безопасность** — HTTP-транспорт для удалённого агента, туннель (Tailscale/WG), approval-gate, ревью
+- [ ] **Этап 4. Сеть и безопасность** — ✅ HTTP-транспорт (stdio/streamable-http/sse); ⬜ туннель (Tailscale/WG), approval-gate, ревью
 - [ ] **Этап 5. Релиз** — пакет, документация, теги, README, V5 skill
 - [ ] **Этап 6 (опц.). On-device вариант** — APK + AccessibilityService (MCP по HTTP)
 
