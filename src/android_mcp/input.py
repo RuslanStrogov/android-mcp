@@ -21,6 +21,24 @@ _KEYCODES = {
     "call": 5,
 }
 
+_INJECT_HINTS = ("INJECT_EVENTS", "SecurityException", "Injecting to another application")
+
+
+def escape_text(text: str) -> str:
+    """Escape text for `adb shell input text` (spaces become %s)."""
+    return text.replace(" ", "%s")
+
+
+def resolve_keycode(key: str) -> int:
+    """Resolve a key name (or numeric string) to an Android keycode."""
+    code = _KEYCODES.get(key)
+    if code is not None:
+        return code
+    try:
+        return int(key)
+    except ValueError:
+        raise ValueError(f"unknown key '{key}'; known: {', '.join(_KEYCODES)}") from None
+
 
 async def _shell(cfg: Config, args: list[str], serial: str | None) -> str:
     result = await run_adb(
@@ -30,7 +48,7 @@ async def _shell(cfg: Config, args: list[str], serial: str | None) -> str:
         timeout=cfg.adb_timeout,
     )
     blob = result.text + result.stderr.decode("utf-8", "replace")
-    if "INJECT_EVENTS" in blob or "SecurityException" in blob:
+    if any(hint in blob for hint in _INJECT_HINTS):
         raise RuntimeError(
             "input injection blocked by this ROM (INJECT_EVENTS). "
             "On MIUI enable 'USB debugging (Security settings)' or grant root."
@@ -63,19 +81,12 @@ async def swipe(
 
 
 async def type_text(cfg: Config, text: str, serial: str | None = None) -> str:
-    # adb `input text` uses %s for spaces; escape is done by the caller for specials.
-    escaped = text.replace(" ", "%s")
-    await _shell(cfg, ["input", "text", escaped], serial)
+    await _shell(cfg, ["input", "text", escape_text(text)], serial)
     return f"typed {len(text)} chars"
 
 
 async def press_key(cfg: Config, key: str, serial: str | None = None) -> str:
-    code = _KEYCODES.get(key)
-    if code is None:
-        try:
-            code = int(key)
-        except ValueError:
-            raise ValueError(f"unknown key '{key}'; known: {', '.join(_KEYCODES)}") from None
+    code = resolve_keycode(key)
     await _shell(cfg, ["input", "keyevent", str(code)], serial)
     return f"key {key} ({code})"
 

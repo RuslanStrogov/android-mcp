@@ -91,7 +91,8 @@ cd android-mcp
 
 ## Архитектура
 
-См. [`PLAN.md`](PLAN.md) и [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+См. [`PLAN.md`](PLAN.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+и подробный справочник инструментов [`docs/TOOLS.md`](docs/TOOLS.md).
 
 ## Лицензия
 
