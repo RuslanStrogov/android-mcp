@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from mcp.server.mcpserver import Image, MCPServer
 
-from . import apps, capabilities, capture
+from . import apps, capabilities, capture, state
 from . import input as input_ops
 from .adb import run_adb
 from .config import Config
@@ -101,6 +101,11 @@ def build_server(config: Config | None = None) -> MCPServer:
         """List installed packages (optionally filtered by substring)."""
         pkgs = await apps.list_packages(cfg, contains, serial)
         return "\n".join(pkgs) if pkgs else "no packages matched"
+
+    @app.tool()
+    async def device_state(serial: str | None = None) -> str:
+        """Get read-only state: battery level/temperature, screen, foreground app."""
+        return state.format_state(await state.get_state(cfg, serial))
 
     @app.tool()
     async def device_capabilities(serial: str | None = None) -> str:
